@@ -1,0 +1,57 @@
+
+text/x-generic .cpanel.yml ( ASCII text )
+---
+deployment:
+  tasks:
+  - export DEPLOYPATH=/home/omnidevs/public_html/
+  #- export DEPLOYPATH=/home/omnidevs/fzkst/almaskosar_webshop
+
+  #- /bin/rm -Rf ${DEPLOYPATH}_old
+  #- /bin/cp -R ${DEPLOYPATH} ${DEPLOYPATH}_old
+
+  #- /bin/rsync -aP --exclude '.git' -- exclude '.well-known' ${REPOPATH}/${DEPLOYPATH} --delete-after
+  #- /bin/chmod 755 ${DEPLOYPATH}
+  #- /bin/find ${DEPLOYPATH} -type d -exec /bin/chmod 755 '{}' \\;
+  #- /bin/find ${DEPLOYPATH} -type f -exec /bin/chmod 644 '{}' \\;
+
+  - /bin/cp -r * $DEPLOYPATH
+
+  - name: Start deployment
+      command: echo "Starting deployment..."
+
+    - name: Change to deployment directory
+      command: cd $DEPLOYPATH
+
+    - name: Clone or pull latest code from GitHub
+      command: |
+        if [ -d "$DEPLOYPATH/.git" ]; then
+          git pull origin main
+        else
+          git clone https://github.com/fzkst/WhatToCook.git $DEPLOYPATH
+        fi
+
+    - name: Install composer dependencies
+      command: composer install --no-dev --optimize-autoloader
+
+    - name: Copy .env file
+      command: |
+        if [ ! -f "$DEPLOYPATH/.env" ]; then
+          cp $DEPLOYPATH/.env.example $DEPLOYPATH/.env
+        fi
+
+    - name: Generate application key
+      command: php artisan key:generate
+
+    - name: Run migrations
+      command: php artisan migrate --force
+
+    - name: Clear caches
+      command: php artisan config:cache && php artisan route:cache && php artisan view:cache
+
+    - name: Install npm dependencies and build assets
+      command: |
+        npm install
+        npm run production
+
+    - name: Finish deployment
+      command: echo "Deployment finished."
