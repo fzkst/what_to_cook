@@ -3,7 +3,7 @@ text/x-generic .cpanel.yml ( ASCII text )
 ---
 deployment:
   tasks:
-  - export DEPLOYPATH=/home/omnidevs/repositories/test3
+  - export DEPLOYPATH=/home/omnidevs/repositories/test3/public/
   #- export DEPLOYPATH=/home/omnidevs/fzkst/almaskosar_webshop
 
   #- /bin/rm -Rf ${DEPLOYPATH}_old
