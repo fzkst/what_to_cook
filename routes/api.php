@@ -17,3 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::get('/otos', 'App\Http\Controllers\API\LotteryController@otos');
+Route::get('/skandi', 'App\Http\Controllers\API\LotteryController@skandi');
+Route::get('/hatos', 'App\Http\Controllers\API\LotteryController@hatos');
