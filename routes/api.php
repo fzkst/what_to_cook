@@ -22,3 +22,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/otos', 'App\Http\Controllers\API\LotteryController@otos');
 Route::get('/skandi', 'App\Http\Controllers\API\LotteryController@skandi');
 Route::get('/hatos', 'App\Http\Controllers\API\LotteryController@hatos');
+Route::get('/eurojackpot', 'App\Http\Controllers\API\LotteryController@eurojackpot');
